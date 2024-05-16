@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity WebGL Project</title>
+    <script>
+        function SyncState(state) {
+            localStorage.setItem('UnityWindowState', state);
+        }
+
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'UnityWindowState') {
+                var state = event.newValue;
+                if (state) {
+                    var unityInstance = UnityLoader.instantiate("unityContainer", "Build/Build.json", {onProgress: UnityProgress});
+                    unityInstance.SendMessage('WindowManager', 'ApplyState', state);
+                }
+            }
+        });
+
+        var unityInstance;
+        window.onload = function() {
+            unityInstance = UnityLoader.instantiate("unityContainer", "Build/Build.json", {onProgress: UnityProgress});
+        };
+    </script>
+</head>
+<body>
+    <div id="unityContainer" style="width: 960px; height: 600px"></div>
+</body>
+</html>
